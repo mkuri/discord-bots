@@ -5,7 +5,7 @@ import threading
 import time
 import traceback
 
-import aiohttp
+import httpx
 import litellm
 import uvicorn
 from discord import Intents, Interaction, app_commands, Attachment
@@ -31,13 +31,13 @@ bot = commands.Bot(command_prefix='>', intents=intents)
 async def download_and_encode_image(url: str) -> str:
     """Download image from URL and return base64 encoded string."""
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    image_data = await response.read()
-                    return base64.b64encode(image_data).decode('utf-8')
-                else:
-                    raise Exception(f"Failed to download image: HTTP {response.status}")
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            if response.status_code == 200:
+                image_data = response.content
+                return base64.b64encode(image_data).decode('utf-8')
+            else:
+                raise Exception(f"Failed to download image: HTTP {response.status_code}")
     except Exception as e:
         print(f"Error downloading image: {e}")
         raise
