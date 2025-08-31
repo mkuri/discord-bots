@@ -10,10 +10,13 @@ import litellm
 import uvicorn
 from discord import Intents, Interaction, app_commands, Attachment
 from discord.ext import commands
+from dotenv import load_dotenv
 from fastapi import FastAPI
 
 # 1. Configuration and Instantiation
 # ------------------------------------
+load_dotenv()  # Load environment variables from .env file
+
 TOKEN = os.environ.get("DISCORD_BOT_TOKEN")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 PORT = int(os.environ.get("PORT", 8080))
