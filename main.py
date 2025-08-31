@@ -20,5 +20,5 @@ async def ping(ctx):
     await ctx.send('pong')
 
 import os
-bot.run(os.environ.get("CLIENT_SECRET"))
+bot.run(os.environ.get("TOKEN"))
 
