@@ -8,7 +8,7 @@ import traceback
 import aiohttp
 import litellm
 import uvicorn
-from discord import Intents, Interaction, app_commands
+from discord import Intents, Interaction, app_commands, Attachment
 from discord.ext import commands
 from fastapi import FastAPI
 
@@ -128,11 +128,11 @@ async def hello(interaction: Interaction, prompt: str):
 async def meal(
     interaction: Interaction,
     description: str = None,
-    image1: app_commands.Attachment = None,
-    image2: app_commands.Attachment = None,
-    image3: app_commands.Attachment = None,
-    image4: app_commands.Attachment = None,
-    image5: app_commands.Attachment = None
+    image1: Attachment = None,
+    image2: Attachment = None,
+    image3: Attachment = None,
+    image4: Attachment = None,
+    image5: Attachment = None
 ):
     # Defer response to prevent timeout
     await interaction.response.defer()
