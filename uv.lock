@@ -214,6 +214,7 @@ dependencies = [
     { name = "discord-py" },
     { name = "fastapi", extra = ["standard"] },
     { name = "litellm" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -222,6 +223,7 @@ requires-dist = [
     { name = "discord-py", specifier = ">=2.6.2" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.116.1" },
     { name = "litellm", specifier = ">=1.76.1" },
+    { name = "python-dotenv", specifier = ">=1.1.1" },
 ]
 
 [[package]]
