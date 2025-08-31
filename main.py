@@ -2,15 +2,18 @@ import asyncio
 import os
 import threading
 import time
+import traceback
 
+import litellm
 import uvicorn
-from discord import Intents
+from discord import Intents, Interaction, app_commands
 from discord.ext import commands
 from fastapi import FastAPI
 
 # 1. Configuration and Instantiation
 # ------------------------------------
-TOKEN = os.environ.get("TOKEN")
+TOKEN = os.environ.get("DISCORD_BOT_TOKEN")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 PORT = int(os.environ.get("PORT", 8080))
 
 intents = Intents.default()
@@ -23,11 +26,40 @@ bot = commands.Bot(command_prefix='>', intents=intents)
 @bot.event
 async def on_ready():
     print(f'Logged in as: {bot.user}')
-    print('Discord Bot is ready.')
+    try:
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} commands.")
+    except Exception as e:
+        print(e)
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send('pong')
+@bot.tree.command(name="ping", description="Test bot response time.")
+async def ping(interaction: Interaction):
+    await interaction.response.send_message(f'Pong! ({round(bot.latency * 1000)}ms)')
+
+@bot.tree.command(name="hello", description="Send a prompt to Gemini API.")
+@app_commands.describe(prompt="Message to send to the API")
+async def hello(interaction: Interaction, prompt: str):
+    # Defer response to prevent timeout
+    await interaction.response.defer()
+
+    try:
+        print(f"Calling Gemini API with prompt: {prompt}")
+        response = await litellm.acompletion(
+            model="gemini/gemini-2.5-flash",
+            messages=[{"role": "user", "content": prompt}],
+            api_key=GEMINI_API_KEY
+        )
+
+        response_text = response.choices[0].message.content
+        print(f"Received response from Gemini: {response_text[:100]}...")
+
+    except Exception as e:
+        print("An error occurred with the Gemini API call.")
+        traceback.print_exc()
+        await interaction.followup.send("An error occurred while calling the API. Please try again later.")
+        return
+
+    await interaction.followup.send(f"**Your prompt:**\n> {prompt}\n\n**Gemini response:**\n{response_text}")
 
 
 # 3. FastAPI App for Health Check
