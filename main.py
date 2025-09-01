@@ -11,7 +11,7 @@ import uvicorn
 from discord import Intents, Interaction, app_commands, Attachment
 from discord.ext import commands
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 
 # 1. Configuration and Instantiation
 # ------------------------------------
@@ -209,10 +209,19 @@ async def meal(
 app = FastAPI()
 
 @app.get("/")
-def health_check():
+def health_check_get():
     # bot.is_ready() can only be used in an async context,
     # so we return a simple static response here.
     return {"status": "ok"}
+
+@app.head("/")
+def health_check_head():
+    """
+    Health check for HEAD requests.
+    Responds to monitoring services like UptimeRobot.
+    Returns only status code 200 OK without response body.
+    """
+    return Response(status_code=200)
 
 
 # 5. Main Execution Block
