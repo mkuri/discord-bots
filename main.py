@@ -228,7 +228,7 @@ def health_check_head():
 # ------------------------------------
 def run_fastapi():
     """Function to run the FastAPI server using Uvicorn."""
-    config = uvicorn.Config(app, host="0.0.0.0", port=PORT)
+    config = uvicorn.Config(app, host="0.0.0.0", port=PORT, log_level="warning")
     server = uvicorn.Server(config)
     asyncio.run(server.serve())
 
