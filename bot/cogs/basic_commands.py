@@ -1,4 +1,4 @@
-from discord import Interaction
+from discord import Interaction, app_commands
 from discord.ext import commands
 
 
@@ -8,7 +8,7 @@ class BasicCommandsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(name="ping", description="Test bot response time.")
+    @app_commands.command(name="ping", description="Test bot response time.")
     async def ping(self, interaction: Interaction):
         """Test bot response time."""
         await interaction.response.send_message(f'Pong! ({round(self.bot.latency * 1000)}ms)')

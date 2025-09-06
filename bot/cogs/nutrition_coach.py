@@ -47,7 +47,7 @@ class NutritionCoachCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(name="meal", description="Get nutrition coaching for your meal photos and/or description.")
+    @app_commands.command(name="meal", description="Get nutrition coaching for your meal photos and/or description.")
     @app_commands.describe(
         description="Text description of the meal (optional if images are provided)",
         image1="First meal photo (optional)",
