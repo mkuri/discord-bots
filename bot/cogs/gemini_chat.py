@@ -11,7 +11,7 @@ class GeminiChatCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(name="hello", description="Send a prompt to Gemini API.")
+    @app_commands.command(name="hello", description="Send a prompt to Gemini API.")
     @app_commands.describe(prompt="Message to send to the API")
     async def hello(self, interaction: Interaction, prompt: str):
         """Send a prompt to Gemini API and get response."""
